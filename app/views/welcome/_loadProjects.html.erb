@@ -1,0 +1,24 @@
+<% @allotherPostDash.each do |post| %>
+    <div class="col-sm-4" style="padding:10px">
+        <div class="col-sm-12" style="background-color:white">
+            <h5 style="color:blue"><span style="color:red">Title: </span>
+                <%=post.title%></h5>
+            <p style="color:black">Date Created : <%=post.created_at.strftime("%B %d, %Y - %T %p")%></p></p>
+            <%
+                auth = User.find(post.userid)
+            %>
+            <p style="color:red">Project By : <%=auth.authorname %></p>
+            <p><%=post.description.to_s[0..300].concat("...")%></p>
+                <%= link_to readOfflineProjectPage_path(view: post.projectid) do %>
+                    <span class='btn btn-primary btn-medium'> 
+                    View Project</span>
+                <%end%> 
+            <p>
+        </div>
+    </div>
+<%end%>
+<%= link_to projectPage_path, :class=>"nav-link ml-auto" do %>
+    <p class='btn btn-success btn-large'>
+    View More Project
+    </p>
+<%end%>

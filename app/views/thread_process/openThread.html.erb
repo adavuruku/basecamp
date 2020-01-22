@@ -1,0 +1,107 @@
+
+    <body style="background-color: gainsboro;">
+    <%= render "account/nav" %>
+        <div class="container-fluid mx-auto" style="background-color: white; padding: 10px;width: 95%;margin-top:60px">
+            <div class="row" style="background-color: gainsboro; margin:5px">
+                <div id="work">
+                    <span class='fas fa-th-list btn btn-danger' data-toggle="collapse" data-target="#menus"></span>
+                    <div id="menus" class="collapse">
+                        <%= render "account/leftNav" %>
+                    </div>
+                </div>
+                <div class="col-sm-8" style="background-color: white; padding: 10px;">
+                    <div class="col-sm-12">
+                        <div class="alert alert-info alert-dismissible fade show" role="alert">
+                            <p>Thread Project : </p>
+                            <p> <%=simple_format(@project[0].project.title)%> <p>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <p>Current Thread : </p>
+                            <p><%=simple_format(@project[0].description)%> <p>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <% if @project[0].thread_message
+                            @project[0].thread_message.each do |thr|
+                            users = User.find(thr.userid)
+                        %>
+                            <div class="row">
+                                <div style="width:10%;padding:15px">
+                                    <%if ! users.passport.attached? %>
+                                        <img data-toggle="modal" src="/def_passport.jpg"  width="60px" 
+                                        class="rounded-circle img-thumbnail" />
+                                    <% else %>
+                                        <%= image_tag users.passport , :width=>"60px" , :class => "rounded-circle img-thumbnail" %>
+                                    <%end%> 
+                                </div>
+                                <div style="width:90%; border-radius:30px;padding:15px">
+                                    <p> <%=users.authorname%> | <%=users.email%> 
+                                        <br><span class="fas fa-calendar-alt" style="color:black"></span> <%=thr.created_at.strftime("%B %d, %Y - %T %p")%> 
+                                       
+                                        <%if thr.userid == session[:authid] || @project[0].project.userid == session[:authid] %>
+                                            <%= link_to deleteThreadMessage_path(view: thr.id, threadid: @project[0].id) , :title=>"Delete Message",
+                                                data: {Confirm: "Are You Sure You want To Delete Message ? \nPlease Confirm.", 
+                                                    title: "Confirm Deletion"} do %>
+                                                <span style="color:red" class='fas fa-trash-alt'></span>
+                                            <%end%>
+                                        <% end %>
+                                        <%if thr.userid == session[:authid]%>
+                                            <%= link_to editThreadMessage_path(view: thr.id, threadid: @project[0].id ) , :title=>"Edit Message" do %>
+                                                <span style="color:green" class=' far fa-edit'></span>
+                                            <%end%>
+                                        <% end %>
+                                        
+                                        <br><%=simple_format(thr.message)%>
+                                    </p>
+                                </div>
+                                <hr/>
+                            </div>
+                        <%      
+                                end
+                            end
+                        %>
+                        
+    
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div style="width:10%;padding:15px">
+                                <%if ! @users.passport.attached? %>
+                                    <img data-toggle="modal" src="/def_passport.jpg"  width="60px" 
+                                    class="rounded-circle img-thumbnail" />
+                                <% else %>
+                                    <%= image_tag @users.passport , :width=>"60px" , :class => "rounded-circle img-thumbnail" %>
+                                <%end%> 
+                            </div>
+                            <div style="width:90%; border-radius:30px;padding:15px">
+                            <%= form_with(url: saveThreadMessage_path, method:'post', :html=>{:class=>'form-horizontal'}, local: true) do |f| %>
+                                    <%= hidden_field_tag 'threadid', @project[0].id %>
+                                    <div class="row">
+                                        <div class="col-sm-10">
+                                            <div class="form-group">
+                                                <%= f.text_area :description, :class =>"form-control", placeholder: "Enter Thread Message", size: "24x5" %>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <div class="form-group">
+                                                <%= f.submit "Submit", :class=>"btn btn-primary btn btn-large" %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% end %>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="col-sm-4 bg-light"> 
+                    <%= render "account/leftNavPost" %>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

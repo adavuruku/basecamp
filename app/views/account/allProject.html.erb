@@ -1,0 +1,22 @@
+
+    <body style="background-color: gainsboro;text-align: justify;">
+    <%= render "nav" %>
+        <div class="container-fluid mx-auto" style="background-color: white; padding: 10px;width: 95%; margin-top:60px">
+            <div class="row" style="background-color: gainsboro; margin:5px">
+                <div id="work">
+                    <span class='fas fa-th-list btn btn-danger' data-toggle="collapse" data-target="#menus"></span>
+                    <div id="menus" class="collapse">
+                        <%= render "leftNav" %>
+                    </div>
+                </div>
+                <div class="col-sm-9" style="background-color: white; padding: 10px;">  
+                    <%= render "allPost" %>
+                </div>
+                <div class="col-sm-3 bg-light" style="padding: 10px;" > 
+                    <%= render "leftNavPost" %>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

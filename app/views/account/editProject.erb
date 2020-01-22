@@ -1,0 +1,61 @@
+
+    <body style="background-color: gainsboro;">
+    <%= render "nav" %>
+        <div class="container-fluid mx-auto" style="background-color: white; padding: 10px;width: 95%;margin-top:60px">
+            <div class="row" style="background-color: gainsboro; margin:5px">
+                <div id="work">
+                    <span class='fas fa-th-list btn btn-danger' data-toggle="collapse" data-target="#menus"></span>
+                    <div id="menus" class="collapse">
+                        <%= render "leftNav" %>
+                    </div>
+                </div>
+                <div class="col-sm-8" style="background-color: white; padding: 10px;">
+                <%= form_with(url: editProject_path, scope: :project, method:'post', :html=>{:class=>'form-horizontal'}, local: true) do |f| %>
+                    <% if @project.errors.any? %>
+                        <div class="form-group">
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <% @project.errors.full_messages.each do |msg| %>
+                                    <p><%= msg %></p>
+                                <% end %>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+                    <% end %>
+                    <% flash.each do |name, msg| %>
+                        <div class="form-group">
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <p><%= msg %></p>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+                    <% end %>
+                    <%= f.hidden_field :projectid, value:  @project['projectid'] %>
+                    <div class="form-group">
+                        <%= f.label :title, "Project Title:" %>
+                        <%= f.text_area :title, :class =>"form-control", placeholder: "Enter Project Title", size: "24x8", value:  @project['title'] %>
+                    </div>
+                    <div class="form-group">
+                        <%= f.label :description, "Project Description:" %>
+                        <%= f.text_area :description, :class =>"form-control", placeholder: "Enter Project Description", size: "24x10", value:  @project['description']%>
+                    </div>
+                    
+                    
+                    
+                    <div class="form-group">
+                        <%= f.submit "Submit New Projext", :class=>"btn btn-primary btn btn-large" %>
+                    </div>
+                <% end %>
+                    
+                </div>
+                <div class="col-sm-4 bg-light"> 
+                    <%= render "leftNavPost" %>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

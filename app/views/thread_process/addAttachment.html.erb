@@ -1,0 +1,69 @@
+
+    <body style="background-color: gainsboro;">
+    <%= render "account/nav" %>
+        <div class="container-fluid mx-auto" style="background-color: white; padding: 10px;width: 95%;margin-top:60px">
+            <div class="row" style="background-color: gainsboro; margin:5px">
+                <div id="work">
+                    <span class='fas fa-th-list btn btn-danger' data-toggle="collapse" data-target="#menus"></span>
+                    <div id="menus" class="collapse">
+                        <%= render "account/leftNav" %>
+                    </div>
+                </div>
+                <div class="col-sm-8" style="background-color: white; padding: 10px;">
+                    <div class="col-sm-12">
+                        <div class="alert alert-info alert-dismissible fade show" role="alert">
+                            <p>Project : </p>
+                            <p> <%=simple_format(@project[0].title)%> <p>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-12">
+                        <div class="row">
+
+                            <div style="width:10%;padding:15px">
+                                <%if ! @users.passport.attached? %>
+                                    <img data-toggle="modal" src="/def_passport.jpg"  width="60px" 
+                                    class="rounded-circle img-thumbnail" />
+                                <% else %>
+                                    <%= image_tag @users.passport , :width=>"60px" , :class => "rounded-circle img-thumbnail" %>
+                                <%end%> 
+                            </div>
+                            <div style="width:90%; border-radius:30px;padding:15px">
+                            <%= form_with(url: saveAttachment_path, method:'post', :html=>{:class=>'form-horizontal'}, local: true) do |f| %>
+                                <% flash.each do |name, msg| %>
+                                    <div class="form-group">
+                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                <p><%= msg %></p>
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                <% end %>    
+                                <%= hidden_field_tag 'projectid', @project[0].id %>
+                                    <div class="form-group">
+                                        <%= f.text_area :description, :class =>"form-control", placeholder: "Enter Thread Message", size: "24x2" %>
+                                    </div>
+                                    <div class="form-group">
+                                        <%=f.file_field :images, multiple:true %>
+                                    </div>
+                                    <div class="form-group">
+                                        <%= f.submit "Submit", :class=>"btn btn-primary btn btn-large" %>
+                                    </div>
+                                <% end %>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="col-sm-4 bg-light"> 
+                    <%= render "account/leftNavPost" %>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

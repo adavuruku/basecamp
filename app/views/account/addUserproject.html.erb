@@ -1,0 +1,119 @@
+
+    <body style="background-color: gainsboro;">
+    <%= render "nav" %>
+        <div class="container-fluid mx-auto" style="background-color: white; padding: 10px;width: 95%;margin-top:60px">
+            <div class="row" style="background-color: gainsboro; margin:5px">
+                <div id="work">
+                    <span class='fas fa-th-list btn btn-danger' data-toggle="collapse" data-target="#menus"></span>
+                    <div id="menus" class="collapse">
+                        <%= render "leftNav" %>
+                    </div>
+                </div>
+                <div class="col-sm-8" style="background-color: white; padding: 10px;">
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        <p>Project : <%=@project[0].title%> <p>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                </div>
+                    <div class="col-sm-12">
+                        <%= form_with(url: searchUserproject_path, method:'post', :html=>{:class=>'form-inline'}, local: true) do |f| %>
+                            <%= f.label :searchValue, "Search : ", :class=>"col-sm-2" %>
+                            <%= f.text_field :searchValue, :class=>"form-control col-sm-8", placeholder: "Enter Users Name Or Email To Search" %>
+                            <%= f.submit "Search", :class=>"btn btn-primary btn btn-large col-sm-2" %>
+                        <% end %>
+                    </div>
+                    <div class="col-sm-12" style="margin-top:20px">
+                        <!-- search result -->
+                        <h5 style="padding: 10px;background-color:beige;">SEARCH RESULT</h5>
+                        <div class="col-sm-12 table-responsive" style="text-align:left; height:300px; overflow:scroll">
+                            <table class="table table-hover table-striped ">
+                                <tbody>
+                                    <% if @searchResult
+                                            @searchResult.each do |post|
+                                                if post.userid != session['authid']%>
+                                                    <tr>
+                                                        <td>
+                                                            <% if ! post.passport.attached? %>
+                                                                <img  src="/def_passport.jpg"  width="50px" 
+                                                                class="rounded img-fluid img-thumbnail mx-auto d-block" />
+                                                            <% else %>
+                                                                <%= image_tag post.passport , :width=>"50px" , :class => "rounded img-fluid img-thumbnail mx-auto d-block" %>
+                                                            <%end%>
+                                                        </td>
+                                                        <td><%=post.authorname%> / <%=post.email%></td>
+                                                        <td>
+                                                            <%= link_to selectUserproject_path(view: post.userid), :class=>"btn btn-success btn btn-large" do %>
+                                                                <span class='fas fa-user-check'></span>
+                                                            <%end%>
+                                                        
+                                                        </td>
+                                                    </tr>
+                                                    
+                                                    <tr>
+                                                        <td colspan="3"></td>
+                                                    </tr>
+                                                <%end
+                                            end
+                                        end%>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <!-- previously added -->
+                        <h5 style="padding: 10px;background-color:beige;">PROJECT USERS 
+                            <%= link_to setUserprojectpermission_path(view: session['projectid']) do %>
+                                <span class='btn btn-info btn-medium'> Edit Permissions </span>
+                            <%end%>
+                        </h5>
+                        <div class="col-sm-12 table-responsive" style="text-align:left; height:300px; overflow:scroll">
+                            <table class="table table-hover table-striped ">
+                                <tbody>
+                                    <% @projectUsers.each do |projuser| 
+                                            post = User.find(projuser.userid)
+                                        %>
+                                        <tr>
+                                            <td>
+                                                <% if ! post.passport.attached? %>
+                                                    <img data-toggle="modal" src="/def_passport.jpg"  width="70px" 
+                                                    class="rounded img-fluid img-thumbnail mx-auto d-block" />
+                                                <% else %>
+                                                    <%= image_tag post.passport , :width=>"70px" , :class => "rounded img-fluid img-thumbnail mx-auto d-block" %>
+                                                <%end%>
+                                            </td>
+                                            <td><%=post.authorname%> / <%=post.email%> 
+                                                <br/><br/>
+                                                Permissions : <span style="color:blue"> 
+                                                <%if projuser.rea then%>Read <%end%>
+                                                <%if projuser.edi then%> / Edit <%end%>
+                                                <%if projuser.wri then%> / Write <%end%>
+                                                <%if projuser.del then%> / Delete <%end%>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <%= link_to deleteUserproject_path(view: post.userid), 
+                                                    data: {Confirm: "Are You Sure You want To Remove \n#{post.authorname} From The Project ? \nPlease Confirm."},
+                                                    :class=>"btn btn-danger btn btn-large" do %>
+                                                    <span class='fas fa-trash-alt'></span>
+                                                <%end%>
+                            
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3"></td>
+                                        </tr>
+                                    <%end%>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 bg-light"> 
+                    <%= render "leftNavPost" %>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

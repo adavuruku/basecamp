@@ -1,0 +1,84 @@
+<h4 style="padding: 15px;background-color:beige;">YOUR PROJECTS</h4>
+    <div class="row">
+        <% @allMyPostDash.each do |post| %>
+            <div class="col-sm-6" style="background-color: white; padding: 10px;"> 
+                    <div class="col-sm-12">
+                        <p style="padding: 10px;background-color:beige;">
+                            <% 
+                                users = User.find(post.userid)
+                                if ! users.passport.attached? %>
+                                    <img data-toggle="modal" src="/def_passport.jpg"  width="60px" 
+                                    class="rounded-circle img-thumbnail" />
+                                <% else %>
+                                    <%= image_tag users.passport , :width=>"60px" , :class => "rounded-circle img-thumbnail" %>
+                                <%end%> 
+                                <%=users.authorname%>
+                        </p>
+                        <div class="col-sm-12">
+                            <h5 style="color:blue"><%=simple_format(post.title)%></h5>
+                            <p style="color:black"><span class="fas fa-calendar-alt"></span> <%=post.created_at.strftime("%B %d, %Y - %T %p")%></p>
+                            <p style="color:black"><%=post.description.to_s[0..200]%>...</p>
+                        </div>
+                        <div class="col-sm-12" style="padding: 10px;background-color:beige;">
+                            <h2>
+                                <%= link_to readProjectPage_path(view: post.projectid), :class=>"btn btn-info btn btn-large", :title=>"Read / Open Project" do %>
+                                    <span class='fas fa-eye'></span>
+                                <%end%>
+                                <%= link_to prepEditproject_path(view: post.projectid), :class=>"btn btn-primary btn btn-large", :title=>"Edit Project" do %>
+                                    <span class='fas fa-edit'></span>
+                                <%end%>
+                                <%= link_to addUserproject_path(proj: post.projectid), :class=>"btn btn-success btn btn-large", :title=>"Add Users To Project" do %>
+                                    <span class='fas fa-user-edit'></span>
+                                <%end%>
+                                <%= link_to prepEditproject_path(view: post.projectid), :class=>"btn btn-warning btn btn-large", :title=>"Add Attachment To Project" do %>
+                                    <span class='fas fa-paperclip'></span>
+                                <%end%>
+                                <%= link_to createThread_path(view: post.projectid), :class=>"btn btn-info btn btn-large", :title=>"Add Thread To Project" do %>
+                                    <span class='fas fa-comment-alt'></span>
+                                <%end%>
+                                <%= link_to prepDeleteproject_path(view: post.projectid) , :title=>"Delete Project",
+                                    data: {Confirm: "Are You Sure You want To Delete \nProject Titled - #{post.title} ? \nPlease Confirm.", 
+                                        title: "Confirm Deletion"},:class=>"btn btn-danger btn btn-large" do %>
+                                    <span class='fas fa-trash-alt'></span>
+                                <%end%>
+                            </h2>
+                        </div>
+                    </div>
+            </div>
+        <%end%>
+    </div>
+
+<% if @noOfPage > 1 %>
+    <div class="col-sm-12">
+        <ul class="pagination  pagination-lg">
+            <% if @hasPrev %>
+                <li class="page-item">
+                    <%= link_to "Previous", userdashboardPage_path(page: @current_page - 1),:class=>"page-link" %>
+                </li>
+            <%end%>
+            <% 
+                page = 1
+                while page <= @noOfPage
+                    if @current_page == page
+            %>
+                        <li class="page-item active">
+                            <%= link_to page, userdashboardPage_path(page: page),:class=>"page-link" %>
+                        </li>
+                        
+                    <%else%>
+                        <li class="page-item">
+                            <%= link_to page, userdashboardPage_path(page: page),:class=>"page-link" %>
+                        </li>
+            <%
+                    end
+                    page = page + 1
+                end
+            %>
+            <% if @hasNext %>
+                <li class="page-item">
+                    <%= link_to "Next", userdashboardPage_path(page: @current_page + 1),:class=>"page-link" %>
+                </li>
+            <%end%>
+        </ul>
+    </div>
+<%end%>

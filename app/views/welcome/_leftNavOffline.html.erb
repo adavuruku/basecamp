@@ -1,0 +1,21 @@
+              
+    <div class="col-sm-12 ">
+        <h4 style="padding: 15px;background-color:beige;">OTHER PROJECTS</h4>
+        <% @allMyPost.each do |post| %>
+            <div class="col-sm-12">
+                <%= link_to readOfflineProjectPage_path(view: post.projectid), :class=>"nav-link" do %>
+                    <h5 style="color:blue"><span style="color:red">Title: </span>
+                        <%=post.title%></h5>
+                    <p style="color:black">Date Created : <%=post.created_at.strftime("%B %d, %Y - %T %p")%></p></a>
+                    <hr/>
+                <%end%>  
+            </div>
+        <%end%>
+        <%= link_to projectPage_path, :class=>"nav-link ml-auto" do %>
+            <p class='btn btn-success btn-large'>
+            View More Project
+            </p>
+        <%end%>
+    </div>
+
+    

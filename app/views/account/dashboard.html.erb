@@ -1,0 +1,32 @@
+    <body style="background-color: gainsboro;text-align: justify;">
+        <%= render "nav" %>
+        <div class="container-fluid mx-auto" style="background-color: white; padding: 10px;width: 95%; margin-top:60px">
+            <div class="row" style="background-color: gainsboro;position: relative; margin:5px">
+                
+                <div id="work">
+                    <span class='fas fa-th-list btn btn-danger' data-toggle="collapse" data-target="#menus"></span>
+                    <div id="menus" class="collapse">
+                        <%= render "leftNav" %>
+                    </div>
+                </div>
+                <div class="col-sm-9" style="background-color: white; padding: 10px;">
+                    <% if session[:authright] == "1" %>
+                        <div class="alert alert-info alert-dismissible fade show" role="alert">
+                            <h5>Welcome <%= @users.authorname %> To BaseCamp Administrative DashBoard</h5>
+                            <p>Note that As a Base Camp Administrator You can SET OR REMOVE Administrative right from other BaseCamp users. </p>
+                            <p>You can either use the Menu Items Or this <%= link_to "View All Users", viewUsers_path, :class=>"btn btn-primary" %>
+                           to SET or REMOVE Administrative Privileges. </p>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    <%end%>  
+                    <%= render "allMyPost" %>
+                </div>
+                <div class="col-sm-3 bg-light" style="padding: 10px;" > 
+                    <%= render "leftNavPostDash" %>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

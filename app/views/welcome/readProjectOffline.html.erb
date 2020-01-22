@@ -1,0 +1,19 @@
+
+    <body style="background-color: gainsboro; text-align: justify;">
+    <%= render "navs" %>
+        <div class="container-fluid mx-auto" style="background-color: white; padding: 10px;width: 95%;margin-top:60px">
+            <div class="row" style="background-color: gainsboro; margin:5px">
+                <div class="col-sm-8" style="background-color: white; padding: 10px;">
+                    <h5 style="color:blue"><span style="color:red">Title: </span><%=@project['title']%></h5>
+                    <p style="color:black">Created By : <%=@uthor['authorname'].to_s.upcase %></p>
+                    <p style="color:black">Date Created : <%=@project['created_at'].strftime("%B %d, %Y - %T %p")%></p>
+                    <p><%=simple_format(@project['description']) %></p>
+                </div>
+                <div class="col-sm-4 bg-light"> 
+                    <%= render "leftNavOffline" %>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

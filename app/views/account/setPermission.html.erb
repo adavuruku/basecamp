@@ -1,0 +1,97 @@
+
+    <body style="background-color: gainsboro;">
+    <%= render "nav" %>
+        <div class="container-fluid mx-auto" style="background-color: white; padding: 10px;width: 95%;margin-top:60px">
+            <div class="row" style="background-color: gainsboro; margin:5px">
+                <div id="work">
+                    <span class='fas fa-th-list btn btn-danger' data-toggle="collapse" data-target="#menus"></span>
+                    <div id="menus" class="collapse">
+                        <%= render "leftNav" %>
+                    </div>
+                </div>
+                <div class="col-sm-9" style="background-color: white; padding: 10px;">
+                    <div class="col-sm-12">
+                        <!-- previously added -->
+
+                        <h5 style="padding:10px;background-color:beige;">Set Permissions
+                            <%= link_to addUserproject_path(proj: session['projectid']) do %>
+                                <span class='btn btn-info btn-medium'> Add / Remove Users </span>
+                            <%end%>
+                        </h5>
+                        <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                <p>Project : <%=@project[0].title%> <p>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                        </div>
+                        <%= form_with(url: updateUserprojectPermission_path, method:'post', :html=>{:class=>'form-inline'}, local: true) do |f| %>
+                            <div class="col-sm-12 table-responsive" style="text-align:left;">
+                                <% flash.each do |name, msg| %>
+                                    <div class="form-group">
+                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                <p><%= msg %></p>
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                <% end %>
+                                <table class="table table-hover table-striped ">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>SNo.</th>
+                                            <th></th>
+                                            <th>Name</th>
+                                            <th>Read</th>
+                                            <th>Write</th>
+                                            <th>Edit</th>
+                                            <th>Delete</th>
+                                        </tr>
+                                    </thead>
+                                   
+                                    <tbody>
+                                    <%  
+                                        t = 1
+                                        @projectUsers.each do |projuser| 
+                                            post = User.find(projuser.userid)
+                                        %>
+                                        <tr>
+                                            <%= hidden_field_tag 'all[]', post.userid %>
+                                            <td><%=t%></td>
+                                            <td>
+                                                <% if ! post.passport.attached? %>
+                                                    <img src="/def_passport.jpg"  width="40px" 
+                                                    class="rounded img-fluid img-thumbnail mx-auto d-block" />
+                                                <% else %>
+                                                    <%= image_tag post.passport , :width=>"40px" , :class => "rounded img-fluid img-thumbnail mx-auto d-block" %>
+                                                <%end%>
+                                            </td>
+                                            <td><%=post.authorname%></td>
+                                            <td><%= check_box_tag 'read[]', post.userid, projuser.rea, :class =>"form-check-input chk", :style => "width: 25px; height: 25px;" %></td>
+                                            <td><%= check_box_tag 'write[]', post.userid,projuser.wri, :class =>"form-check-input chk",:style => "width: 25px; height: 25px;" %></td>
+                                            <td><%= check_box_tag 'edit[]', post.userid, projuser.edi, :class =>"form-check-input chk", :style => "width: 25px; height: 25px;" %></td>
+                                            <td><%= check_box_tag 'del[]', post.userid, projuser.del, :class =>"form-check-input chk", :style => "width: 25px; height: 25px;" %></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="7"></td>
+                                        </tr>
+                                    <% 
+                                        t = t + 1
+                                        end %>
+                                    </tbody>
+                                </table>
+                                <div class="form-group">
+                                    <%= f.submit "Update Permissions", :class=>"btn btn-primary btn btn-large" %>
+                                </div>
+                            </div>
+                        <% end %>
+                    </div>
+                </div>
+                <div class="col-sm-3 bg-light"> 
+                    <%= render "leftNavPost" %>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

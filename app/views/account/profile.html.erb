@@ -1,0 +1,86 @@
+
+    <body style="background-color: gainsboro;">
+    <%= render "nav" %>
+        <div class="container-fluid mx-auto" style="background-color: white; padding: 10px;width: 95%;margin-top:60px">
+            <div class="row" style="background-color: gainsboro; margin:5px">
+                <div id="work">
+                    <span class='fas fa-th-list btn btn-danger' data-toggle="collapse" data-target="#menus"></span>
+                    <div id="menus" class="collapse">
+                        <%= render "leftNav" %>
+                    </div>
+                </div>
+                <div class="col-sm-8" style="background-color: white; padding: 10px;"> 
+                <%= form_with(url: updateprofilePage_path, scope: :users, method:'post', :html=>{:class=>'form-horizontal'}, local: true) do |f| %>
+                    <% if @users.errors.any? %>
+                        <div class="form-group">
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <% @users.errors.full_messages.each do |msg| %>
+                                    <p><%= msg %></p>
+                                <% end %>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+                    <% end %>
+                    <% flash.each do |name, msg| %>
+                        <div class="form-group">
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <p><%= msg %></p>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+                    <% end %>
+                    <div class="row">
+                        <div class="col-sm-4" style="padding:10px">
+                            <% if ! @users.passport.attached? %>
+                                <img data-toggle="modal" src="/def_passport.jpg"  
+                                class="rounded-circle img-fluid img-thumbnai mx-auto d-block" alt="Circular Image"/>
+                            <% else %>
+                                <%= image_tag @users.passport ,:width=>"550", :class => "rounded-circle img-fluid img-thumbnai mx-auto d-block" %>
+                            <%end%>
+                            <div class="form-group">
+                                <%= f.label :title, "Profile Pics : " %>
+                                <%=f.file_field :passport %>
+                            </div>   
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="form-group">
+                                <h4><%= @users.authorname %></h4>
+                            </div>
+                            <div class="form-group">
+                                <%= f.label :phone, "Enter Phone Number:" %>
+                                <%= f.telephone_field :phone, :class =>"form-control", placeholder: "Enter Phone Numbers",
+                                 value:@users.phone %>
+                            </div>
+                            <div class="form-group">
+                                <%= f.label :email, "Enter Email Address:" %>
+                                <%= f.email_field :email, :class =>"form-control", placeholder: "Enter Your Email Address",
+                                value:@users.email  %>
+                            </div>
+                            <div class="form-group">
+                                <%= f.label :contactAdd, "Enter Contact Address:" %>
+                                <%= f.text_area :contactAdd, :class =>"form-control", placeholder: "Enter Your Contact Address", size: "24x6", 
+                                value:@users.contactAdd %>
+                            </div>
+                            
+                                                 
+                            <div class="form-group">
+                                <%= f.submit "Update Profile", :class=>"btn btn-primary btn btn-large" %>
+                            </div>
+                        </div>
+                    </div>
+                    
+                <% end %>
+                    
+                </div>
+                <div class="col-sm-4 bg-light"> 
+                    <%= render "leftNavPost" %>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

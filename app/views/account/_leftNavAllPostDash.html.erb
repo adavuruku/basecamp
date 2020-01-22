@@ -1,0 +1,18 @@
+      <div class="col-sm-12 ">
+        <h4 style="padding: 15px;background-color:beige;">YOUR PROJECTS</h4>
+        <% @allMyPost.each do |post| %>
+            <div class="col-sm-12">
+                <%= link_to readProjectPage_path(view: post.projectid), :class=>"nav-link" do %>
+                    <h6 style="color:blue"><span style="color:red"></span>
+                        <%=simple_format(post.title)%></h6>
+                    <p style="color:black"><%=post.created_at.strftime("%B %d, %Y - %T %p")%></p>
+                    <hr/>
+                <%end%>
+            </div>
+        <%end%>
+        <%= link_to userdashboardPage_path, :class=>"nav-link" do %>
+            <p class='btn btn-primary btn-large'>
+            View More Project
+            </p>
+        <%end%>
+    </div>

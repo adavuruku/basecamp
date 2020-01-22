@@ -1,0 +1,22 @@
+ <!DOCTYPE html>
+<html>
+  <head>
+    <title>Basecamp</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" %>
+    <%= javascript_include_tag "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js" %>
+    <%= javascript_include_tag 'https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js' %>
+    <%= javascript_include_tag "https://kit.fontawesome.com/a076d05399.js" %>
+    <style>
+        #work {
+            position: fixed;
+            z-index: 10;
+            top: 10vh;
+        }
+    </style>
+  </head>
+    <%= yield %>

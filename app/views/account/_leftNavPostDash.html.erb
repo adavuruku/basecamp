@@ -1,0 +1,31 @@
+              
+    <div class="col-sm-12 ">
+        <h4 style="padding: 15px;background-color:beige;">MEMBERSHIP PROJECTS</h4>
+        <% @otherPost.each do |post|
+            getPost = Project.find_by("projectid = :projectid and status = :status", { projectid: post.projectid, status: "0" })
+            if getPost
+                author = User.find(getPost.userid)
+                %>
+
+                <div class="col-sm-12">
+                    <%= link_to readProjectPage_path(view: post.projectid), :class=>"nav-link" do %>
+                        <h6>
+                        <span style="color:red">
+                            Project By : <%=author.authorname%> , </span>
+                            <span style="color:blue">
+                            <%=simple_format(getPost.title)%></span> 
+                        </h6>
+                        
+                        <p style="color:black"><span class="fas fa-calendar-alt"></span> <%=getPost.created_at.strftime("%B %d, %Y - %T %p")%></p>
+                        
+                        <hr/>
+                    <%end%>
+                </div>
+        <%  end
+        end%>
+        <%= link_to allProjectPage_path, :class=>"nav-link" do %>
+            <p class='btn btn-primary btn-large'>
+                View More Project
+            </p>
+        <%end%>
+    </div>

@@ -1,0 +1,47 @@
+
+    <body style="background-color: gainsboro;">
+    <%= render "account/nav" %>
+        <div class="container-fluid mx-auto" style="background-color: white; padding: 10px;width: 95%;margin-top:60px">
+            <div class="row" style="background-color: gainsboro; margin:5px">
+                <div id="work">
+                    <span class='fas fa-th-list btn btn-danger' data-toggle="collapse" data-target="#menus"></span>
+                    <div id="menus" class="collapse">
+                        <%= render "account/leftNav" %>
+                    </div>
+                </div>
+                <div class="col-sm-8" style="background-color: white; padding: 10px;">
+                    <div class="col-sm-12"> 
+                        <h5 style="padding:10px;background-color:beige;">Manage Project Threads</h5>
+                        <div class="form-group">
+                            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                <p>Project : <%=@project[0].title%> <p>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+                        <% if @project[0].project_thread
+                                @project[0].project_thread.each do |thr|
+                        %>
+                                <p><%= simple_format(thr.description[0...200])%> </p>
+                                <p><span class="fas fa-calendar-alt" style="color:red"></span > <%=thr.created_at.strftime("%B %d, %Y - %T %p")%>
+                                
+                                <%= link_to readProjectThread_path(view: thr.id) do %>
+                                    <span class='fas fa-comments'>  <%=thr.thread_message.count%> Messages</span>
+                                <%end%>
+                                </p>
+                                <hr/>
+                        <%      
+                                end
+                            end
+                        %>
+                    </div>
+                </div>
+                <div class="col-sm-4 bg-light"> 
+                    <%= render "account/leftNavPost" %>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

@@ -1,0 +1,78 @@
+
+<h4 style="padding: 15px;background-color:beige;">ALL BASE CAMP USER</h4>
+<div class="col-sm-12 table-responsive" style="text-align:left">
+    <table class="table table-hover table-striped ">
+        <thead class="thead-light">
+            <tr>
+                <th>Name</th>
+                <th>Phone / Email</th>
+                <th>Contact Add</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <% @allUsers.each do |post| %>
+                <% if post.userid != session['authid']%>
+                    <tr>
+                        <td><%=post.authorname%></td>
+                        <td><%=post.phone%>  / <%=post.email%></td>
+                        <td><%=post.contactAdd%></td>
+                        <%if post.right == "1" %>
+                            <td>
+                                <%= link_to removeAdmin_path(view: post.userid), data: {Confirm: "Are You Sure You want To Remove Admin Right \nFor User - #{post.authorname} ? \nPlease Confirm."} do %>
+                                    <span class='btn btn-primary btn-medium'> 
+                                    REMOVE ADMIN</span>
+                                <%end%>
+                            </td>
+                        <%else%>
+                            <td>
+                                <%= link_to setAdmin_path(view: post.userid), data: {Confirm: "Are You Sure You want To Set Admin Right \nFor User - #{post.authorname} ? \nPlease Confirm."} do %>
+                                    <span class='btn btn-info btn-medium'> 
+                                    SET ADMIN</span>
+                                <%end%>
+                            </td>
+                        <%end%>
+                    </tr>
+                <%end%>  
+            <%end%>
+        </tbody>
+    </table>
+</div>
+
+
+
+<div class="col-sm-12" style="margin-top: 15px">
+    <% if @noOfPage > 1 %>
+            <ul class="pagination  pagination-lg">
+                <% if @hasPrev %>
+                    <li class="page-item">
+                        <%= link_to "Previous", viewUsers_path(page: @current_page - 1),:class=>"page-link" %>
+                    </li>
+                <%end%>
+                <% 
+                    page = 1
+                    while page <= @noOfPage
+                        if @current_page == page
+                %>
+                            <li class="page-item active">
+                                <%= link_to page, viewUsers_path(page: page),:class=>"page-link" %>
+                            </li>
+                            
+                        <%else%>
+                            <li class="page-item">
+                                <%= link_to page, viewUsers_path(page: page),:class=>"page-link" %>
+                            </li>
+                <%
+                        end
+                        page = page + 1
+                    end
+                %>
+                <% if @hasNext %>
+                    <li class="page-item">
+                        <%= link_to "Next", viewUsers_path(page: @current_page + 1),:class=>"page-link" %>
+                    </li>
+                <%end%>
+            </ul>
+    
+    <%end%>
+</div>

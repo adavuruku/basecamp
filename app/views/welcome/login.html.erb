@@ -1,0 +1,124 @@
+<style>
+        .box {
+            border-radius: 3px;
+            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+            padding: 10px 25px;
+            text-align: right;
+            display: block;
+            margin-top: 60px;
+            background-color: #F0F0F0;
+        }
+        textarea:focus, input:focus{
+            outline: none;
+        }
+        .box-icon {
+            background-color: #007bff;
+            border-radius: 50%;
+            display: table;
+            height: 100px;
+            margin: 0 auto;
+            width: 100px;
+            margin-top: -61px;
+        }
+        
+        .box-icon span {
+            color: #fff;
+            display: table-cell;
+            text-align: center;
+            vertical-align: middle;
+        }
+        
+        .info h4 {
+            font-size: 26px;
+            letter-spacing: 2px;
+            font-weight:bold;
+            text-transform: uppercase;
+        }
+        
+        .info > p {
+            color: black;
+            font-size: 16px;
+            padding-top: 10px;
+            text-align: justify;
+        }
+        
+        .info > a {
+            background-color: #03a9f4;
+            border-radius: 2px;
+            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+            color: #fff;
+            transition: all 0.5s ease 0s;
+        }
+        
+        .info > a:hover {
+            background-color: #0288d1;
+            box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.16), 0 2px 5px 0 rgba(0, 0, 0, 0.12);
+            color: #fff;
+            transition: all 0.5s ease 0s;
+        }
+        .fas, .far{
+            text-shadow:2px 2px 4px #000000;
+        }
+    </style>
+    <body style="background-color: gainsboro;">
+        <%= render "navs" %>
+        <br>
+        <div class="container-fluid mx-auto" style="background-color: white; margin-top:40px; width:90% ; padding: 10px;">
+            <div class="row" style="background-color: gainsboro; padding: 10px;margin:5px">
+                <div class="col-sm-6" style="background-color: white; padding: 10px;"> 
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-bottom:30px">
+                        <div class="box">
+                            <div class="box-icon">
+                                <span ><h1 class="fas fa-paperclip"></h1></span>
+                            </div>
+                            <div class="info">
+                                <h4 class="text-center">About My BaseCamp 1</h4>
+                                <p style="padding-top:2px;"> In this form, you are expected to fill the required details of Every Company that is associated
+                                to Your Company Both Directly or Indirectly - the information needed are the Name of the Company, RC Number and Registered
+                                    Address of the Companies. - You can also remove any Associated Company detail you have recorded from the list - it will be
+                                    best if Accurate Information of All the Associated Companies are Provided You can also remove any Associated Company detail you have recorded from the list - it will be
+                                    best if Accurate Information of All the Associated Companies are Provided.!! <a href="#"><small class="btn btn-primary">Read More</small></a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-5 offset-sm-1" style="background-color: white;  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12); padding: 20px"> 
+                    <h4 style="color:#007bff">Please Login / <%= link_to "Create An Acount", homePage_path,:class=>"btn btn-primary" %></h4>
+                    <hr/>    
+                    <%= form_with(url: loginProcess_path,  method:'post', :html=>{:class=>'form-horizontal'}, local: true) do |f| %>
+                        <% flash.each do |name, msg| %>
+                            <div class="form-group">
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <ul>
+                                        <li><%= msg %></li>
+                                    </ul>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            </div>
+                        <% end %>
+                        
+                        
+                        <div class="form-group">
+                            <%= f.label :email, "Enter Email Address:" %>
+                            <%= f.email_field :email, :class =>"form-control", placeholder: "Enter Your Email Address",  value: @email  %>
+                        </div>
+                        
+                        <div class="form-group">
+                            <%= f.label :password, "Enter Password:" %>
+                            <%= f.password_field :password, :class =>"form-control", placeholder: "Enter Your Password"%>
+                        </div>
+                        <div class="form-group">
+                            <%= f.submit "Click To Login", :class=>"btn btn-primary btn btn-large" %>
+                        </div>
+                    <% end %>
+                    <hr/>
+                </div>
+                <div class="row" style="background-color:white; margin-top:10px;text-align:justify">
+                    <%= render 'loadProjects' %>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
