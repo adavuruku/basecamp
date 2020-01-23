@@ -11,7 +11,11 @@
                 </div>
                 <div class="col-sm-8" style="background-color: white; padding: 10px;">
                 <div class="alert alert-info alert-dismissible fade show" role="alert">
-                        <p>Project : <%=@project[0].title%> <p>
+                        <p>Project : <%=@project[0].title%> 
+                        <%= link_to readProjectPage_path(view: @project[0].projectid), :class=>"btn btn-info btn btn-large", :title=>"Read / Open Project" do %>
+                            <span class='fas fa-eye'></span>
+                        <%end%> <p>
+                        
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>

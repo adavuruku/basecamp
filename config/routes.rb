@@ -65,6 +65,13 @@ Rails.application.routes.draw do
   post '/saveAttachment', to: 'thread_process#saveAttachment', as: 'saveAttachment'
   get '/removeAttachment', to: 'thread_process#removeAttachment', as: 'removeAttachment'
 
+  #dealing with project task
+  get '/addTask', to: 'thread_process#addTask', as: 'addTask'
+  get '/viewAllTask', to: 'thread_process#viewAllTask', as: 'viewAllTask'
+  get '/removeTask', to: 'thread_process#removeTask', as: 'removeTask'
+  get '/editTask', to: 'thread_process#editTask', as: 'editTask'
+  post '/saveTask', to: 'thread_process#saveTask', as: 'saveTask'
+  post '/updateTask', to: 'thread_process#updateTask', as: 'updateTask'
   
   #admin only commands
   #view Users project

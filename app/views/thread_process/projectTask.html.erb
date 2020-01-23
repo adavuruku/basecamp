@@ -11,7 +11,7 @@
                 </div>
                 <div class="col-sm-8" style="background-color: white; padding: 10px;">
                     <div class="col-sm-12"> 
-                        <h5 style="padding:10px;background-color:beige;">Manage Project Threads</h5>
+                        <h5 style="padding:10px;background-color:beige;">All Project Task</h5>
                         <div class="form-group">
                             <div class="alert alert-info alert-dismissible fade show" role="alert">
                                 <p>Project : <%=@project[0].title%> 
@@ -25,15 +25,26 @@
                             </div>
                         </div>
                         <% if @project[0].project_thread
-                                @project[0].project_thread.each do |thr|
+                                @project[0].project_task.each do |thr|
+                                    users = User.find(thr.userid)
                         %>
-                                <p><%= simple_format(thr.description[0...200])%> </p>
-                                <p><span class="fas fa-calendar-alt" style="color:red"></span > <%=thr.created_at.strftime("%B %d, %Y - %T %p")%>
-                                
-                                <%= link_to readProjectThread_path(view: thr.id) do %>
-                                    <span class='fas fa-comments'>  <%=thr.thread_message.count%> Messages</span>
-                                <%end%>
-                                </p>
+                                <div class="row">
+                                    <div style="width:10%;padding:15px">
+                                        <%if ! users.passport.attached? %>
+                                            <img data-toggle="modal" src="/def_passport.jpg"  width="60px" 
+                                            class="rounded-circle img-thumbnail" />
+                                        <% else %>
+                                            <%= image_tag users.passport , :width=>"60px" , :class => "rounded-circle img-thumbnail" %>
+                                        <%end%> 
+                                    </div>
+                                    <div style="width:90%; border-radius:30px;padding:15px">
+                                        <p> <%=users.authorname%> |
+                                            <span class="fas fa-calendar-alt" style="color:black"></span> <%=thr.created_at.strftime("%B %d, %Y - %T %p")%>
+                                            <br><%=simple_format(thr.description)%>
+                                            
+                                        </p>
+                                    </div>
+                                </div>
                                 <hr/>
                         <%      
                                 end

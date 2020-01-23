@@ -11,8 +11,8 @@
                 </div>
                 <div class="col-sm-8" style="background-color: white; padding: 10px;">
                     <div class="col-sm-12"> 
-                        <h5 style="padding:10px;background-color:beige;">Manage Project Threads</h5>
-                        <%= form_with(url: saveThread_path, scope: :ProjectThread, method:'post', :html=>{:class=>'form-horizontal'}, local: true) do |f| %>
+                        <h5 style="padding:10px;background-color:beige;">Manage Project Tasks</h5>
+                        <%= form_with(url: saveTask_path, scope: :ProjectTask, method:'post', :html=>{:class=>'form-horizontal'}, local: true) do |f| %>
                             <div class="form-group">
                                 <div class="alert alert-info alert-dismissible fade show" role="alert">
                                     <p>Project : <%=@project[0].title%> 
@@ -38,43 +38,49 @@
                             <%= hidden_field_tag 'projectid', @project[0].projectid %>
                             <%= hidden_field_tag 'pid', @project[0].id %>
                             <div class="form-group">
-                                <%= f.label :description, "Add Thread Description:" %>
-                                <%= f.text_area :description, :class =>"form-control", placeholder: "Enter Thread Description", size: "24x5" %>
+                                <%= f.label :description, "Add Task Description:" %>
+                                <%= f.text_area :description, :class =>"form-control", placeholder: "Enter Task Description", size: "24x5" %>
                             </div>
                             
                             <div class="form-group">
-                                <%= f.submit "Submit New Thread", :class=>"btn btn-primary btn btn-large" %>
+                                <%= f.submit "Submit New Task", :class=>"btn btn-primary btn btn-large" %>
                             </div>
                         <% end %>
                     </div>
                     <div class="col-sm-12">
-                    <h5 style="padding:10px;background-color:beige;">Existing Project Threads</h5>
-                        <% if @project[0].project_thread
-                                @project[0].project_thread.reverse.each do |thr|
-                                    users = User.find(session[:authid])
+                    <h5 style="padding:10px;background-color:beige;">Existing Project Task</h5>
+                        <% if @project[0].project_task
+                                @project[0].project_task.reverse.each do |thr|
+                                    users = User.find(thr.userid)
                         %>
-                                <div class="row">
-                                    <div style="width:10%;padding:15px">
-                                        <%if ! users.passport.attached? %>
-                                            <img data-toggle="modal" src="/def_passport.jpg"  width="60px" 
-                                            class="rounded-circle img-thumbnail" />
-                                        <% else %>
-                                            <%= image_tag users.passport , :width=>"60px" , :class => "rounded-circle img-thumbnail" %>
-                                        <%end%> 
-                                    </div>
-                                    <div style="width:90%; border-radius:30px;padding:15px">
-                                        <p> <%=users.authorname%> |
-                                            <span class="fas fa-calendar-alt" style="color:black"></span> <%=thr.created_at.strftime("%B %d, %Y - %T %p")%>
-                                            <br><%=simple_format(thr.description[0...200])%>
-                                            <%= link_to readProjectThread_path(view: thr.id) do %>
-                                                <span class='fas fa-comments'> <%=thr.thread_message.count%> Messages</span>
-                                            <%end%> | 
-                                            <%= link_to readProjectThread_path(view: thr.id) do %>
-                                                <span class='fas fa-trash btn btn-danger'></span>
-                                            <%end%>
-                                        </p>
-                                    </div>
+                            <div class="row">
+                                <div style="width:10%;padding:15px">
+                                    <%if ! users.passport.attached? %>
+                                        <img data-toggle="modal" src="/def_passport.jpg"  width="60px" 
+                                        class="rounded-circle img-thumbnail" />
+                                    <% else %>
+                                        <%= image_tag users.passport , :width=>"60px" , :class => "rounded-circle img-thumbnail" %>
+                                    <%end%> 
                                 </div>
+                                <div style="width:90%; border-radius:30px;padding:15px">
+                                    <p> <%=users.authorname%> |
+                                        <span class="fas fa-calendar-alt" style="color:black"></span> <%=thr.created_at.strftime("%B %d, %Y - %T %p")%>
+                                        <br><%=simple_format(thr.description)%>
+                                        <%if users.userid == session[:authid] or session[:authid] == @project[0].userid %>
+                                            <%= link_to removeTask_path(view: thr.id, projectid:@project[0].projectid ) , :title=>"Delete File",
+                                                data: {Confirm: "Are You Sure You want To Delete Task ? \nPlease Confirm.", 
+                                                    title: "Confirm Deletion"} do %>
+                                                <span class='fas fa-trash-alt btn btn-danger'></span>
+                                            <%end%>
+                                        <%end%>
+                                        <%if users.userid == session[:authid] %>
+                                            <%= link_to editTask_path(view: thr.id) do %>
+                                                <span class='fas fa-edit btn btn-info' style='color:blue'></span>
+                                            <%end
+                                        end%>
+                                    </p>
+                                </div>
+                            </div>
                                 <hr/>
                         <%
                                 end

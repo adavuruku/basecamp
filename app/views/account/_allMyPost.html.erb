@@ -30,11 +30,14 @@
                                 <%= link_to addUserproject_path(proj: post.projectid), :class=>"btn btn-success btn btn-large", :title=>"Add Users To Project" do %>
                                     <span class='fas fa-user-edit'></span>
                                 <%end%>
-                                <%= link_to prepEditproject_path(view: post.projectid), :class=>"btn btn-warning btn btn-large", :title=>"Add Attachment To Project" do %>
+                                <%= link_to addAttachment_path(view: post.projectid), :class=>"btn btn-warning btn btn-large", :title=>"Add Attachment To Project" do %>
                                     <span class='fas fa-paperclip'></span>
                                 <%end%>
                                 <%= link_to createThread_path(view: post.projectid), :class=>"btn btn-info btn btn-large", :title=>"Add Thread To Project" do %>
                                     <span class='fas fa-comment-alt'></span>
+                                <%end%>
+                                <%= link_to addTask_path(view: post.projectid), :class=>"btn btn-success btn btn-large", :title=>"Add Task To Project" do %>
+                                    <span class='fas fa-paper-plane'></span>
                                 <%end%>
                                 <%= link_to prepDeleteproject_path(view: post.projectid) , :title=>"Delete Project",
                                     data: {Confirm: "Are You Sure You want To Delete \nProject Titled - #{post.title} ? \nPlease Confirm.", 
