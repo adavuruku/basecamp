@@ -6,7 +6,8 @@ ruby '2.6.5'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.0.2', '>= 6.0.2.1'
 # Use sqlite3 as the database for Active Record
-gem 'sqlite3', '~> 1.4'
+#gem 'sqlite3', '~> 1.4'
+#gem 'pg'
 # Use Puma as the app server
 gem 'puma', '~> 4.1'
 gem 'bootstrap','~>4.0.0.alpha3'
@@ -34,6 +35,7 @@ gem 'bootsnap', '>= 1.4.2', require: false
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'sqlite3', '~> 1.4'
 end
 
 group :development do
@@ -41,6 +43,11 @@ group :development do
   gem 'web-console', '>= 3.3.0'
 end
 
+group :production do
+  # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
+  gem 'pg'
+  gem 'rails_12factor'
+end
 group :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '>= 2.15'
