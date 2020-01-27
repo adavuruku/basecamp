@@ -31,11 +31,17 @@
                                     <%= link_to prepEditproject_path(view: getPost.projectid), :class=>"btn btn-primary btn btn-large", :title=>"Edit Project" do %>
                                         <span class='fas fa-edit'></span>
                                     <%end%>
-                                    <%= link_to addAttachment_path(view: getPost.projectid), :class=>"btn btn-warning btn btn-large", :title=>"Add Attachment To Project" do %>
-                                        <span class='fas fa-paperclip'></span>
-                                    <%end%>
+                                    <%= link_to addTask_path(view: getPost.projectid), :class=>"btn btn-success btn btn-large", :title=>"Add Task To Project" do %>
+                                        <span class='fas fa-paper-plane'></span>
+                                    <%end
+                                else%>
+                                    <%= link_to viewAllTask_path(view: getPost.projectid), :class=>"btn btn-primary btn btn-large", :title=>"View Project Task" do %>
+                                        <span class='fas fa-tasks'></span>
+                                    <%end
+                                end%>
+                                <%= link_to addAttachment_path(view: getPost.projectid), :class=>"btn btn-warning btn btn-large", :title=>"Add Attachment To Project" do %>
+                                    <span class='fas fa-paperclip'></span>
                                 <%end%>
-                                
                                 <%= link_to viewProjectUsers_path(proj: getPost.projectid), :class=>"btn btn-success btn btn-large", :title=>"View Project Users" do %>
                                     <span class='fas fa-user-check'></span>
                                 <%end%>

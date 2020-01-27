@@ -13,7 +13,10 @@
                     <div class="col-sm-12">
                         <div class="alert alert-info alert-dismissible fade show" role="alert">
                             <p>Project : </p>
-                            <p> <%=simple_format(@project[0].title)%> <p>
+                            <p> <%=simple_format(@project[0].title)%> 
+                            <%= link_to readProjectPage_path(view: @project[0].projectid), :class=>"btn btn-info btn btn-large", :title=>"Read / Open Project" do %>
+                                <span class='fas fa-eye'></span>
+                            <%end%> <p>
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -44,8 +47,9 @@
                                     </div>
                                 <% end %>    
                                 <%= hidden_field_tag 'projectid', @project[0].id %>
+                                <%= hidden_field_tag 'projectidTag', @project[0].projectid %>
                                     <div class="form-group">
-                                        <%= f.text_area :description, :class =>"form-control", placeholder: "Enter Thread Message", size: "24x2" %>
+                                        <%= f.text_area :description, :class =>"form-control", placeholder: "Enter Attachment Message", size: "24x2" %>
                                     </div>
                                     <div class="form-group">
                                         <%=f.file_field :images, multiple:true %>
@@ -57,7 +61,53 @@
                             </div>
                         </div>
                     </div>
-                    
+                    <div class="col-sm-12">
+                        <h6 style="padding: 5px;background-color:beige;">EXISTING PROJECT ATTACHMENTS</h6>
+                        <%  @projectAttach.reverse.each do |thr|
+                            users = User.find(thr.userid)
+                            g = ProjectAttached.find(thr.id)
+
+                                if g.images.count > 0
+                               
+                        %>
+                                    <div class="row">
+                                        <div style="width:10%;padding:15px">
+                                            <%if ! users.passport.attached? %>
+                                                <img data-toggle="modal" src="/def_passport.jpg"  width="60px" 
+                                                class="rounded-circle img-thumbnail" />
+                                            <% else %>
+                                                <%= image_tag users.passport , :width=>"60px" , :class => "rounded-circle img-thumbnail" %>
+                                            <%end%> 
+                                        </div>
+                                        <div style="width:90%; border-radius:30px;padding:15px">
+                                            <p> <%=users.authorname%> | <%=users.email%> | 
+                                                <span class="fas fa-calendar-alt" style="color:black"></span> <%=thr.created_at.strftime("%B %d, %Y - %T %p")%>
+                                                <br><%=simple_format(thr.comment)%>
+                                            </p>
+                                        
+                                        <% g.images.each do |sherif|%>
+                                                <p><span class="fas fa-paperclip"></span> <%= sherif.filename%> 
+                                                <%= link_to rails_blob_path(sherif, disposition: "preview"), target: "_blank", :title=>"View / Download File" do %>
+                                                    <span class='fas fa-cloud-download-alt'></span>
+                                                <%end%>
+
+                                                <%if users.userid == session[:authid] or session[:authid] == @project[0].userid %>
+                                                    <%= link_to removeAttachment_path(view: sherif.id, projectid: @project[0].projectid ) , :title=>"Delete File",
+                                                        data: {Confirm: "Are You Sure You want To Delete \nFile - #{sherif.filename} ? \nPlease Confirm.", 
+                                                            title: "Confirm Deletion"} do %>
+                                                        <span class='fas fa-trash-alt' style='color:red'></span>
+                                                    <%end%>
+                                                <%end%>
+                                                </p> 
+                                            <%end%>
+                                        </div>
+                                    </div>
+                                <hr/>
+                        <%  else
+                                ProjectAttached.delete_by(id: thr.id)                                  
+                            end
+                        end%>
+                   </div>
                 </div>
                 <div class="col-sm-4 bg-light"> 
                     <%= render "account/leftNavPost" %>

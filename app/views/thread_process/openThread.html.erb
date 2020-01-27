@@ -13,7 +13,10 @@
                     <div class="col-sm-12">
                         <div class="alert alert-info alert-dismissible fade show" role="alert">
                             <p>Thread Project : </p>
-                            <p> <%=simple_format(@project[0].project.title)%> <p>
+                            <p> <%=simple_format(@project[0].project.title)%> 
+                            <%= link_to readProjectPage_path(view: @project[0].project.projectid), :class=>"btn btn-info btn btn-large", :title=>"Read / Open Project" do %>
+                                <span class='fas fa-eye'></span>
+                            <%end%><p>
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
