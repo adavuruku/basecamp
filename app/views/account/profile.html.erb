@@ -1,7 +1,7 @@
 
     <body style="background-color: gainsboro;">
     <%= render "nav" %>
-        <div class="container-fluid mx-auto" style="background-color: white; padding: 10px;width: 95%;margin-top:60px">
+        <div class="container-fluid mx-auto" style="background-color: white; padding: 10px;width: 95%;margin-top:60px; padding-bottom:10%">
             <div class="row" style="background-color: gainsboro; margin:5px">
                 <div id="work">
                     <span class='fas fa-th-list btn btn-danger' data-toggle="collapse" data-target="#menus"></span>
@@ -9,7 +9,7 @@
                         <%= render "leftNav" %>
                     </div>
                 </div>
-                <div class="col-sm-8" style="background-color: white; padding: 10px;"> 
+                <div class="col-sm-8 col-xs-12" style="background-color: white; padding: 10px;"> 
                 <%= form_with(url: updateprofilePage_path, scope: :users, method:'post', :html=>{:class=>'form-horizontal'}, local: true) do |f| %>
                     <% if @users.errors.any? %>
                         <div class="form-group">
@@ -34,7 +34,7 @@
                         </div>
                     <% end %>
                     <div class="row">
-                        <div class="col-sm-4" style="padding:10px">
+                        <div class="col-sm-4 col-xs-12" style="padding:10px">
                             <% if ! @users.passport.attached? %>
                                 <img data-toggle="modal" src="/def_passport.jpg"  
                                 class="rounded-circle img-fluid img-thumbnai mx-auto d-block" alt="Circular Image"/>
@@ -46,7 +46,7 @@
                                 <%=f.file_field :passport %>
                             </div>   
                         </div>
-                        <div class="col-sm-8">
+                        <div class="col-sm-8 col-xs-12">
                             <div class="form-group">
                                 <h4><%= @users.authorname %></h4>
                             </div>
@@ -76,11 +76,11 @@
                 <% end %>
                     
                 </div>
-                <div class="col-sm-4 bg-light"> 
+                <div class="col-sm-4 col-xs-12 bg-light"> 
                     <%= render "leftNavPost" %>
                 </div>
             </div>
         </div>
-
+        <%= render "welcome/footer" %>
     </body>
 </html>

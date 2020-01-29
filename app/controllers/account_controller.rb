@@ -34,7 +34,7 @@ class AccountController < ApplicationController
         #lets paginate
         #get all status not yet deleted
         totRecord = ProjectUser.where(userid: session[:authid]).count
-        recPerPage = 5
+        recPerPage = 4
         @noOfPage = totRecord % recPerPage == 0 ? (totRecord / recPerPage) : (totRecord / recPerPage) + 1
         
         #get every_page for offset record
@@ -119,12 +119,14 @@ class AccountController < ApplicationController
     #editing an existing project
     #load the project
     def prepEditProject
-        @loggedin = User.where("login = :login", { login: "1"})
-        @users = User.find(session[:authid])
-        @allMyPost = Project.where("status = :status and userid = :userid", { status: "0", userid: session[:authid] }).limit(5).order(id: :desc)
         if params[:view]
-            @project = Project.find_by(projectid: params[:view], status: "0")
-            if @project
+            @projectUsers = ProjectUser.where("projectid= :projectid and userid = :userid and (edi =:edi or wri = :wri)",
+                        {projectid:params[:view], userid:session[:authid], wri:true, edi:true})
+            @project = Project.where("status = :status and userid = :userid and projectid = :projectid ",{projectid: params[:view], status: "0", userid: session[:authid]})
+            if (@projectUsers.count >= 1 or @project.count >= 1)
+                @project = Project.find_by(projectid: params[:view], status: "0")
+                @users = User.find(session[:authid])
+                @allMyPost = Project.where("status = :status and userid = :userid", { status: "0", userid: session[:authid] }).limit(5).order(id: :desc) 
                 render 'editProject'
             else
                 redirect_to userdashboardPage_path
@@ -140,7 +142,6 @@ class AccountController < ApplicationController
             #@prova = @project.first.attributes
             @project.title = post_params[:title]
             @project.description = post_params[:description]
-
             if @project.save
                 flash[:error] ="Project Successfuly Updated !!! "
                 redirect_to :controller=>'account', :action => 'prepEditProject', view: post_params[:projectid]
@@ -155,15 +156,19 @@ class AccountController < ApplicationController
 
     #reading / viewing a project
     def readProject
-        @users = User.find(session[:authid])
-        @allMyPost = Project.where("status = :status and userid = :userid", { status: "0", userid: session[:authid] }).limit(5).order(id: :desc)
-        #@loggedin = User.where("login = :login", { login: "1"})
         if params[:view]
-            @project = Project.find_by(projectid: params[:view], status: "0")
-            @author = User.find_by_userid(@project['userid'])
-            #if !@project.empty?
-            if @project
+            # u have read
+            @projectUsers = ProjectUser.where("projectid= :projectid and userid = :userid and  rea = :rea",
+                        {projectid:params[:view], userid:session[:authid], rea:true})
+            # or u own d project
+            @project = Project.where("status = :status and userid = :userid and projectid = :projectid ",{projectid: params[:view], status: "0", userid: session[:authid]})
+
+            if (@projectUsers.count >= 1 or @project.count >= 1)
+                @users = User.find(session[:authid])
+                @allMyPost = Project.where("status = :status and userid = :userid", { status: "0", userid: session[:authid] }).limit(5).order(id: :desc)
+                @project = Project.find_by(projectid: params[:view], status: "0")
                 @projectAttach = ProjectAttached.where(project_id: @project.id)
+                @author = User.find_by_userid(@project['userid'])
                 render 'readProject'
             else
                 redirect_to userdashboardPage_path
@@ -174,11 +179,16 @@ class AccountController < ApplicationController
     end
     
     def DeleteProject
-        @users = User.find(session[:authid])
-        if params[:view] && @users
-            @project = Project.find_by(projectid: params[:view], status: "0")
-            @project.update_attribute(:status, "1")
-            if @project
+        if params[:view]
+            # u have read
+            @projectUsers = ProjectUser.where("projectid= :projectid and userid = :userid and  del = :del",
+                        {projectid:params[:view], userid:session[:authid], del:true})
+            # or u own d project
+            @project = Project.where("status = :status and userid = :userid and projectid = :projectid ",{projectid: params[:view], status: "0", userid: session[:authid]})
+            if (@projectUsers.count >= 1 or @project.count >= 1)
+                @users = User.find(session[:authid])
+                @project = Project.find_by(projectid: params[:view], status: "0")
+                @project.update_attribute(:status, "1")
                 redirect_to userdashboardPage_path
             else
                 redirect_to userdashboardPage_path
@@ -266,10 +276,15 @@ class AccountController < ApplicationController
             #@loggedin = User.where("login = :login", { login: "1"})
             if params[:proj] !=nil
                 session['projectid'] = params[:proj]
-                @project = Project.where(projectid: params[:proj])
+                @project = Project.where("status = :status and userid = :userid and projectid = :projectid ",{projectid: params[:proj], status: "0", userid: session[:authid]})
                 @allMyPost = Project.where("status = :status and userid = :userid", { status: "0", userid: session[:authid] }).limit(5).order(id: :desc)
                 @projectUsers = ProjectUser.where(projectid: params[:proj]).order(id: :desc)
-                render 'addUserproject'
+                if @project.count >= 1
+                    render 'addUserproject'
+                else
+                     flash[:error] ="You Dont Have Access To The Requested Resource !"
+                     redirect_to loginPage_path
+                end
             else
                 flash[:error] ="You Dont Have Access To The Requested Resource !"
                 redirect_to loginPage_path
@@ -281,11 +296,17 @@ class AccountController < ApplicationController
            # @loggedin = User.where("login = :login", { login: "1"})
             @allMyPost = Project.where("status = :status and userid = :userid", { status: "0", userid: session[:authid] }).limit(5).order(id: :desc)
             if session[:authid] != nil and params[:searchValue] !=nil
-                @project = Project.where(projectid: session['projectid'])
+                @project = Project.where("status = :status and userid = :userid and projectid = :projectid ",{projectid: session['projectid'], status: "0", userid: session[:authid]})
+                # @project = Project.where(projectid: session['projectid'])
                 @projectUsers = ProjectUser.where(projectid: session['projectid']).order(id: :desc)
                 @searchResult = User.where("authorname like :authorname or email like :email ", {authorname: "%#{params[:searchValue]}%", email: "%#{params[:searchValue]}%"})
                 #session['searchResult'] = @searchResult
-                render 'addUserproject'
+                if @project.count >= 1
+                    render 'addUserproject'
+                else
+                    flash[:error] ="You Dont Have Access To The Requested Resource !"
+                    redirect_to loginPage_path
+                end
             else
                 flash[:error] ="You Dont Have Access To The Requested Resource !"
                 redirect_to loginPage_path
@@ -293,13 +314,19 @@ class AccountController < ApplicationController
         end
         def selectUserproject
             if session[:authid] != nil and params[:view] !=nil
-                if ProjectUser.where("projectid = :projectid and userid = :userid", { projectid: session[:projectid], userid: params[:view] }).count < 1
-                    projUser = ProjectUser.new
-                    projUser.projectid = session['projectid']
-                    projUser.userid = params[:view]
-                    projUser.save
+                @project = Project.where("status = :status and userid = :userid and projectid = :projectid ",{projectid: session['projectid'], status: "0", userid: session[:authid]})
+                if @project.count >= 1
+                    if ProjectUser.where("projectid = :projectid and userid = :userid", { projectid: session[:projectid], userid: params[:view] }).count < 1
+                        projUser = ProjectUser.new
+                        projUser.projectid = session['projectid']
+                        projUser.userid = params[:view]
+                        projUser.save
+                    end
+                    redirect_to :controller=>'account', :action => 'addUserproject', proj: session['projectid']
+                else
+                    flash[:error] ="You Dont Have Access To The Requested Resource !"
+                    redirect_to loginPage_path
                 end
-                redirect_to :controller=>'account', :action => 'addUserproject', proj: session['projectid']
             else
                 flash[:error] ="You have to Login To Admin DashBoard to Access Resource !"
                 redirect_to loginPage_path
@@ -308,9 +335,15 @@ class AccountController < ApplicationController
 
         def deleteUserproject
             if session[:authid] != nil and params[:view] !=nil
-                ProjectUser.delete_by(projectid: session[:projectid], userid: params[:view])
-                @projectUsers = ProjectUser.where(projectid: session['projectid']).order(id: :desc)
-                redirect_to :controller=>'account', :action => 'addUserproject', proj: session['projectid']
+                @project = Project.where("status = :status and userid = :userid and projectid = :projectid ",{projectid: session['projectid'], status: "0", userid: session[:authid]})
+                if @project.count >= 1
+                    ProjectUser.delete_by(projectid: session[:projectid], userid: params[:view])
+                    @projectUsers = ProjectUser.where(projectid: session['projectid']).order(id: :desc)
+                    redirect_to :controller=>'account', :action => 'addUserproject', proj: session['projectid']
+                else
+                    flash[:error] ="You Dont Have Access To The Requested Resource !"
+                    redirect_to loginPage_path
+                end
             else
                 flash[:error] ="You have to Login To Admin DashBoard to Access Resource !"
                 redirect_to loginPage_path
@@ -323,8 +356,13 @@ class AccountController < ApplicationController
             @allMyPost = Project.where("status = :status and userid = :userid", { status: "0", userid: session[:authid] }).limit(5).order(id: :desc)
             if session[:authid] != nil and session['projectid'] !=nil
                 @projectUsers = ProjectUser.where(projectid: session['projectid']).order(id: :desc)
-                @project = Project.where(projectid: session['projectid'])
-                render 'setPermission'
+                @project = Project.where("status = :status and userid = :userid and projectid = :projectid ",{projectid: session['projectid'], status: "0", userid: session[:authid]})
+                if @project.count >= 1
+                    render 'setPermission'
+                else
+                    flash[:error] ="You Dont Have Access To The Requested Resource !"
+                    redirect_to loginPage_path
+                end
             else
                 flash[:error] ="You have to Login To Admin DashBoard to Access Resource !"
                 redirect_to loginPage_path
@@ -332,19 +370,25 @@ class AccountController < ApplicationController
         end
         def updateUserPermission
             if session[:authid] != nil and session['projectid'] !=nil
-                all = params[:all]
-                if  all.length > 0
-                    all.each do |userid|
-                        userNow = ProjectUser.find_by("projectid = :projectid and userid = :userid", { projectid: session[:projectid], userid: userid })
-                        if params[:read] !=nil and (params[:read].include? userid) then userNow.rea=true else userNow.rea=false end
-                        if params[:write] !=nil and (params[:write].include? userid) then userNow.wri=true else userNow.wri=false end
-                        if params[:edit] !=nil and (params[:edit].include? userid) then userNow.edi=true else userNow.edi=false end
-                        if params[:del] !=nil and (params[:del].include? userid) then userNow.del=true else userNow.del=false end
-                        userNow.save
+                @project = Project.where("status = :status and userid = :userid and projectid = :projectid ",{projectid: session['projectid'], status: "0", userid: session[:authid]})
+                if @project.count >= 1
+                    all = params[:all]
+                    if  all.length > 0
+                        all.each do |userid|
+                            userNow = ProjectUser.find_by("projectid = :projectid and userid = :userid", { projectid: session[:projectid], userid: userid })
+                            if params[:read] !=nil and (params[:read].include? userid) then userNow.rea=true else userNow.rea=false end
+                            if params[:write] !=nil and (params[:write].include? userid) then userNow.wri=true else userNow.wri=false end
+                            if params[:edit] !=nil and (params[:edit].include? userid) then userNow.edi=true else userNow.edi=false end
+                            if params[:del] !=nil and (params[:del].include? userid) then userNow.del=true else userNow.del=false end
+                            userNow.save
+                        end
                     end
+                    flash[:error] ="Users Permission Succesfully Updated !"
+                    redirect_to setUserprojectpermission_path
+                else
+                    flash[:error] ="You Dont Have Access To The Requested Resource !"
+                    redirect_to loginPage_path
                 end
-                flash[:error] ="Users Permission Succesfully Updated !"
-                redirect_to setUserprojectpermission_path
             else
                 flash[:error] ="You have to Login To Admin DashBoard to Access Resource !"
                 redirect_to loginPage_path
@@ -353,13 +397,17 @@ class AccountController < ApplicationController
     #added user wants to view project users
     def viewProjectUsers
         @users = User.find(session[:authid])
-        #@projectUsers = ProjectUser.where("projectid:"projectid: params[:proj]).order(id: :desc)
-        @loggedin = User.where("login = :login", { login: "1"})
         @allMyPost = Project.where("status = :status and userid = :userid", { status: "0", userid: session[:authid] }).limit(5).order(id: :desc)
         if session[:authid] != nil and params[:proj] !=nil
-            @projectUsers = ProjectUser.where(projectid: params[:proj]).order(id: :desc)
-            @project = Project.where(projectid: params[:proj])
-            render 'viewAllProjectUser'
+            @projectUsers = ProjectUser.where("projectid = :projectid and userid= :userid", {projectid: params[:proj], userid:  session[:authid]})
+            if @projectUsers.count >= 1
+                @projectUsers = ProjectUser.where(projectid: params[:proj]).order(id: :desc)
+                @project = Project.where(projectid: params[:proj])
+                render 'viewAllProjectUser'
+            else
+                flash[:error] ="You Dont Have Access To The Requested Resource !"
+                redirect_to loginPage_path
+            end
         else
             flash[:error] ="You have to Login To Admin DashBoard to Access Resource !"
             redirect_to loginPage_path

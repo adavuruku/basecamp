@@ -63,7 +63,7 @@
     <body style="background-color: gainsboro;">
         <%= render "navs" %>
         <br>
-        <div class="container-fluid mx-auto" style="background-color: white; margin-top:40px; width:90% ; padding: 10px;">
+        <div class="container-fluid mx-auto" style="background-color: white; margin-top:40px; margin-bottom:25%; width:90% ; padding: 10px;">
             <div class="row" style="background-color: gainsboro; padding: 10px;margin:5px">
                 <div class="col-sm-6" style="background-color: white; padding: 10px;"> 
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-bottom:30px">
@@ -72,12 +72,17 @@
                                 <span ><h1 class="fas fa-paperclip"></h1></span>
                             </div>
                             <div class="info">
-                                <h4 class="text-center">About My BaseCamp 1</h4>
-                                <p style="padding-top:2px;"> In this form, you are expected to fill the required details of Every Company that is associated
-                                to Your Company Both Directly or Indirectly - the information needed are the Name of the Company, RC Number and Registered
-                                    Address of the Companies. - You can also remove any Associated Company detail you have recorded from the list - it will be
-                                    best if Accurate Information of All the Associated Companies are Provided You can also remove any Associated Company detail you have recorded from the list - it will be
-                                    best if Accurate Information of All the Associated Companies are Provided.!! <a href="#"><small class="btn btn-primary">Read More</small></a></p>
+                            <h4 class="text-center">About BaseCamp</h4>
+                            <p style="padding-top:2px;"> At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis 
+                            praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint 
+                            occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, 
+                            id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. 
+                            Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id 
+                            quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. 
+                            Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet
+                             ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic 
+                             tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur 
+                             aut perferendis doloribus asperiores repellat..!! <a href="#"><small class="btn btn-primary">Read More</small></a></p>
                             </div>
                         </div>
                     </div>
@@ -115,10 +120,9 @@
                     <% end %>
                     <hr/>
                 </div>
-                <div class="row" style="background-color:white; margin-top:10px;text-align:justify">
-                    <%= render 'loadProjects' %>
-                </div>
+                
             </div>
         </div>
+        <%= render "welcome/footer" %>
     </body>
 </html>
