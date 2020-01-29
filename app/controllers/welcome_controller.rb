@@ -1,6 +1,5 @@
 class WelcomeController < ApplicationController
-  
-
+  skip_before_action :verifyLogin
   #process the login
   def login
     @allotherPostDash = Project.where("status = :status", { status: "0"}).limit(6).order(id: :desc)

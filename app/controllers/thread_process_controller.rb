@@ -14,17 +14,12 @@ class ThreadProcessController < ApplicationController
     end
 
     def saveThread
-        if session[:authid] != nil
-            newthread = ProjectThread.new
-            newthread.description = post_params[:description]
-            newthread.project_id = params[:pid]
-            newthread.save
-            flash[:error] = "Thread Created Successfully"
-            redirect_to :controller=>'thread_process', :action => 'createThread', view: params['projectid']
-        else
-            flash[:error] ="You have to Login To Admin DashBoard to Access Resource !"
-            redirect_to loginPage_path
-        end
+        newthread = ProjectThread.new
+        newthread.description = post_params[:description]
+        newthread.project_id = params[:pid]
+        newthread.save
+        flash[:error] = "Thread Created Successfully"
+        redirect_to :controller=>'thread_process', :action => 'createThread', view: params['projectid']
     end
     def viewProjectThread
         @users = User.find(session[:authid])
@@ -51,17 +46,12 @@ class ThreadProcessController < ApplicationController
     end
     
     def saveThreadMessage
-        if session[:authid] != nil
-            thMessage = ThreadMessage.new
-            thMessage.project_thread_id = params[:threadid]
-            thMessage.message = params[:description]
-            thMessage.userid = session['authid']
-            thMessage.save
-            redirect_to :controller=>'thread_process', :action => 'readProjectThread', view: params[:threadid]
-        else
-            flash[:error] ="You have to Login To Admin DashBoard to Access Resource !"
-            redirect_to loginPage_path
-        end
+        thMessage = ThreadMessage.new
+        thMessage.project_thread_id = params[:threadid]
+        thMessage.message = params[:description]
+        thMessage.userid = session['authid']
+        thMessage.save
+        redirect_to :controller=>'thread_process', :action => 'readProjectThread', view: params[:threadid]
     end
 
     def deleteThreadMessage
@@ -69,7 +59,7 @@ class ThreadProcessController < ApplicationController
             ThreadMessage.delete_by("id =:id and userid=:userid",{id:params[:view], userid:session[:authid]} )
             redirect_to :controller=>'thread_process', :action => 'readProjectThread', view: params[:threadid]
         else
-            flash[:error] ="You have to Login To Admin DashBoard to Access Resource !"
+            flash[:error] ="You have No Access Requested Resource !"
             redirect_to loginPage_path
         end
     end
@@ -81,7 +71,7 @@ class ThreadProcessController < ApplicationController
             @thmsg = ThreadMessage.find_by("id=:id and userid=:userid",{id:params[:view], userid:session[:authid]} )
             render 'editThreadMessage'
         else
-            flash[:error] ="You have to Login To Admin DashBoard to Access Resource !"
+            flash[:error] ="You have No Access Requested Resource !"
             redirect_to loginPage_path
         end
     end
@@ -92,7 +82,7 @@ class ThreadProcessController < ApplicationController
             thmsg.save
             redirect_to :controller=>'thread_process', :action => 'readProjectThread', view: params[:threadid]
         else
-            flash[:error] ="You have to Login To Admin DashBoard to Access Resource !"
+            flash[:error] ="You have No Access Requested Resource !"
             redirect_to loginPage_path
         end
     end
@@ -104,29 +94,24 @@ class ThreadProcessController < ApplicationController
             @projectAttach = ProjectAttached.where(project_id: @project[0].id)
             render 'addAttachment'
         else
-            flash[:error] ="You have to Login To Admin DashBoard to Access Resource !"
+            flash[:error] ="You have No Access Requested Resource !"
             redirect_to loginPage_path
         end
     end
 
     def saveAttachment
-        if session[:authid] != nil
-            @project = Project.where(id: params[:projectid])
-            newAttach = ProjectAttached.new
-            newAttach.userid = session[:authid]
-            newAttach.project_id = @project[0].id
-            newAttach.comment =params[:description]
-            if params[:images]
-                newAttach.images.attach(params[:images])
-            end
-            newAttach.save
-            flash[:error] ="Attachment Created !"
-            #render 'addAttachment'
-            redirect_to :controller=>'thread_process', :action => 'addAttachment', view: params[:projectidTag] 
-        else
-            flash[:error] ="You have to Login To Admin DashBoard to Access Resource !"
-            redirect_to loginPage_path
+        @project = Project.where(id: params[:projectid])
+        newAttach = ProjectAttached.new
+        newAttach.userid = session[:authid]
+        newAttach.project_id = @project[0].id
+        newAttach.comment =params[:description]
+        if params[:images]
+            newAttach.images.attach(params[:images])
         end
+        newAttach.save
+        flash[:error] ="Attachment Created !"
+        #render 'addAttachment'
+        redirect_to :controller=>'thread_process', :action => 'addAttachment', view: params[:projectidTag] 
     end
     def removeAttachment
         if session[:authid] != nil and params[:view] !=nil
@@ -153,18 +138,13 @@ class ThreadProcessController < ApplicationController
         end
     end
     def saveTask
-        if session[:authid] != nil
-            newTask = ProjectTask.new
-            newTask.description = task_params[:description]
-            newTask.project_id = params[:pid]
-            newTask.userid = session[:authid]
-            newTask.save
-            flash[:error] = "Task Created Successfully"
-            redirect_to :controller=>'thread_process', :action => 'addTask', view: params['projectid']
-        else
-            flash[:error] ="You have to Login To Admin DashBoard to Access Resource !"
-            redirect_to loginPage_path
-        end
+        newTask = ProjectTask.new
+        newTask.description = task_params[:description]
+        newTask.project_id = params[:pid]
+        newTask.userid = session[:authid]
+        newTask.save
+        flash[:error] = "Task Created Successfully"
+        redirect_to :controller=>'thread_process', :action => 'addTask', view: params['projectid']
     end
     def viewAllTask
         @users = User.find(session[:authid])
@@ -198,15 +178,10 @@ class ThreadProcessController < ApplicationController
         end
     end
     def updateTask
-        if session[:authid] != nil
-            dek = ProjectTask.find_by(id:params[:taskid])
-            dek.description = params[:description]
-            dek.save
-            redirect_to :controller=>'thread_process', :action => 'addTask', view: params['projectid']
-        else
-            flash[:error] ="You have to Login To Admin DashBoard to Access Resource !"
-            redirect_to loginPage_path
-        end
+        dek = ProjectTask.find_by(id:params[:taskid])
+        dek.description = params[:description]
+        dek.save
+        redirect_to :controller=>'thread_process', :action => 'addTask', view: params['projectid']
     end
     private def post_params
         params.require(:ProjectThread).permit(:description, :projectid, :pid)
