@@ -54,6 +54,51 @@
 # if y<5 then y=2 else y =3 end
 
 # p y
-j = 
-@projectAttach = ProjectAttached.find_by(project_id: 18)
-@projectAttach.count
+# j = 
+# @projectAttach = ProjectAttached.find_by(project_id: 18)
+# @projectAttach.count
+
+
+
+mount = valley = 0
+counterM = counterV = 0
+command = "UDDDUDUU".upcase.split("")
+command.each do |st|
+    if st=="U"
+        counterM = counterM + 1
+    end
+    if st=="D"
+        counterV = counterV + 1
+    end
+
+    if(counterM < counterV)
+        counterV = counterV - 1
+    end
+    if(counterM < counterV)
+        counterM = counterM - 1
+    end
+end
+
+# p valley
+q = 7
+
+.
+
+def maniCulate(q, d)
+    jump = tot = 0 
+    counter = 0
+    d.each do |t|
+        check = d[counter]
+        if check == 1
+            counter = counter + 2
+        else
+            counter = counter + 1
+        end
+        if d[counter] == 0
+            jump = jump + 1
+        end
+    end
+    p jump
+end
+
+maniCulate(q, d)

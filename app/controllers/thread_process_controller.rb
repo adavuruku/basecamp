@@ -17,8 +17,11 @@ class ThreadProcessController < ApplicationController
         newthread = ProjectThread.new
         newthread.description = post_params[:description]
         newthread.project_id = params[:pid]
-        newthread.save
-        flash[:error] = "Thread Created Successfully"
+        if newthread.save
+            flash[:error] = "Thread Created Successfully"
+        else
+            flash[:error] = "Unable To Create Thread"
+        end
         redirect_to :controller=>'thread_process', :action => 'createThread', view: params['projectid']
     end
     def viewProjectThread
@@ -108,17 +111,20 @@ class ThreadProcessController < ApplicationController
         if params[:images]
             newAttach.images.attach(params[:images])
         end
-        newAttach.save
-        flash[:error] ="Attachment Created !"
+        if newAttach.save
+            flash[:error] ="Attachment Created !"
+        else
+            flash[:error] ="Fail To Create Attachment !"
+        end
         #render 'addAttachment'
         redirect_to :controller=>'thread_process', :action => 'addAttachment', view: params[:projectidTag] 
     end
     def removeAttachment
         if session[:authid] != nil and params[:view] !=nil
             @image = ActiveStorage::Attachment.find(params[:view])
-            puts ActiveStorage::Attachment.count
+            #puts ActiveStorage::Attachment.count
             @image.purge
-            puts ActiveStorage::Attachment.count
+            #puts ActiveStorage::Attachment.count
             redirect_to :controller => 'thread_process', :action => 'addAttachment', view: params[:projectid]
         else
             flash[:error] ="You have to Login To Admin DashBoard to Access Resource !"
@@ -142,8 +148,11 @@ class ThreadProcessController < ApplicationController
         newTask.description = task_params[:description]
         newTask.project_id = params[:pid]
         newTask.userid = session[:authid]
-        newTask.save
-        flash[:error] = "Task Created Successfully"
+        if newTask.save
+            flash[:error] = "Task Created Successfully"
+        else
+            flash[:error] = "Fail To Create Task"
+        end
         redirect_to :controller=>'thread_process', :action => 'addTask', view: params['projectid']
     end
     def viewAllTask
