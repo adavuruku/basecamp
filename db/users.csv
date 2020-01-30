@@ -1,0 +1,9 @@
+id,authorname,email,phone,userid,password,contactAdd,right,login,created_at,updated_at,password_digest
+9,Akim john,akimjohn@gmail.com,09032445567,55311900,,D41 Inike Okene Road 4R Kogi State.,1,0,2020-01-09 12:36:28.991568,2020-01-30 13:29:57.545632,$2a$12$kWEGRIpcFWdcAEwyAdyP9u.b3XMtRpQL.m9Ro.OPwO2Wd9BLrZMcy
+10,Abdulraheem Sherif Adavruruku,aabdulraheemsherif@outsourceglobal.net,08164377187,86894087,,D41 Inike Okene Kogi State.,0,0,2020-01-13 18:35:34.483148,2020-01-29 20:02:30.716540,$2a$12$StwjFUvucxRot6Iv8MAwAO96SYCu6boRc0X03lq3fhIPQe1q0XlQW
+11,Adejoh Kabir O.,adejohkabir@yaho.com,09033221112,60865677,,Giri Road Abuja Nigeria.,0,0,2020-01-14 15:16:39.344285,2020-01-14 15:16:46.886050,$2a$12$olqntuhgYoYQVX8GMCoQsO/qPJiIbOwB5UuSs/FDmzkhG4.tq20iC
+12,Josehph John Paikwo,josephjohn.paikwo@gmail.com,07089322245,72239783,,"Lokoja-Kogi, Nigeria",0,0,2020-01-14 15:18:12.314401,2020-01-14 15:18:23.425406,$2a$12$o0GFRaxzByaMAZHtH1Pz6OvN8pJ4sG8SVjyGOgEoTqfh99CXJm9fu
+13,Abdulkareem Usman Kamasi,abdulraheem.sherif@gmail.com,09033221112,81892322,,"Flat 31B, Hatus Lokoja Kogi State.",0,1,2020-01-14 15:20:14.520481,2020-01-17 14:53:37.971916,$2a$12$tq08v.15o1lAvcwNFICDgufUJKbOdi75ucW8C/XLCJP50qXkexzD6
+14,Adama Maidungu Henry,adama.maidungu@yahoo.com,08123456667,49064585,,Kabir Road Opp. Lake Park Osun Nigeria,0,0,2020-01-14 15:21:49.927124,2020-01-14 15:21:58.075385,$2a$12$pvSN9PA8DwTxn4DN4lIXD.JPQwNRUoD7BHSRgXIBvdMWzIvMYfepy
+15,Janet Paulina John,janedqueen@yahoo.com,07089922231,85947586,,"Durumi II Opp. Redeemed Church, Garki Abuja",0,0,2020-01-14 15:23:38.554059,2020-01-14 15:23:46.900036,$2a$12$YIki7P9DSmF8xoNHCRST0.0M1XKPDrosbldjLTrXiDAsnoSAC6pPK
+16,Muhammed Zukanaine Ojo,zulkamu@hotmail.com,08123456787,53432540,,"Katungo Malongo 34 Street, Rivers Nigeria",0,0,2020-01-14 15:25:33.676732,2020-01-14 15:42:33.747854,$2a$12$g5/QC5TTvSYeOfwwCbuSCe41ByaFu93W7smrET/bIrsKw3x7.YFna

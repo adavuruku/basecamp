@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_23_143937) do
+ActiveRecord::Schema.define(version: 2020_01_30_135520) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -94,13 +94,12 @@ ActiveRecord::Schema.define(version: 2020_01_23_143937) do
     t.string "email"
     t.string "phone"
     t.string "userid"
-    t.text "password"
     t.text "contactAdd"
     t.string "right"
     t.string "login"
+    t.text "password_digest"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.text "password_digest"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -108,5 +107,4 @@ ActiveRecord::Schema.define(version: 2020_01_23_143937) do
   add_foreign_key "project_tasks", "projects"
   add_foreign_key "project_threads", "projects"
   add_foreign_key "thread_messages", "project_threads"
-  add_foreign_key "users", "projects", column: "userid"
 end

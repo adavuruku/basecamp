@@ -1,5 +1,4 @@
 class User < ApplicationRecord
-    has_many :project
     has_one_attached :passport
     before_save { 
         self.email = email.downcase

@@ -2,6 +2,7 @@ class Project < ApplicationRecord
     has_many :project_thread
     has_many :project_attached
     has_many :project_task
+    
     #self.primary_key = "projectid"
     validates :title, presence: true
     validates :description, presence: true
